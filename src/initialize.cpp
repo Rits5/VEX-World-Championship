@@ -22,13 +22,12 @@ void initialize() {
 
   pros::ADIGyro gyro (GYRO_PORT, 0.9510); //0.9456 //0.9704 //0.97 //0/96 //0.9550
 
-  pros::ADIDigitalIn limit_switch (LIMIT_SWITCH_PORT);
-  pros::ADIAnalogIn light (LIGHT_SENSOR_PORT);
-  pros::ADIAnalogIn light_flywheel (LIGHT_SENSOR_FLYWHEEL_PORT);
-  pros::ADIAnalogIn pot (POT_PORT);
+//WAS NOT COMMENTED FOR BCIT
+  // pros::ADIDigitalIn limit_switch (LIMIT_SWITCH_PORT);
+  // pros::ADIAnalogIn light (LIGHT_SENSOR_PORT);
+  // pros::ADIAnalogIn light_flywheel (LIGHT_SENSOR_FLYWHEEL_PORT);
+  // pros::ADIAnalogIn pot (POT_PORT);
 
-  // pros::ADIEncoder encoder_left(LEFT_ENC_PORT_TOP, LEFT_ENC_PORT_BOT, REVERSE);
-  // pros::ADIEncoder encoder_right(RIGHT_ENC_PORT_TOP, RIGHT_ENC_PORT_BOT, REVERSE);
 
   pros::task_t intake_task_init = pros::c::task_create(intake_task, (void*)NULL, TASK_PRIORITY_DEFAULT,
                               TASK_STACK_DEPTH_DEFAULT, "INTAKE TASK");

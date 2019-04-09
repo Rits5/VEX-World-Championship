@@ -2,6 +2,7 @@
 #define FLIPPER_H_
 
 #include "main.h"
+#include "drive.h"
 
 //use positive voltage for flipper to go down
 
@@ -34,8 +35,11 @@ void flipper_backup(float give_dist_before_flipper, bool give_flipper_down, int 
 
   #define REST 1050 //1000
   #define EXTEND 2850
+  #define BRAKE 360
 
-  void flipper(bool give_flipper_move_to_position, int give_flipper_position = 350, int give_flipper_speed = 0, int give_resting_position = REST, int give_extended_position = EXTEND);
+  extern pid_terms flipper_pid;
+
+  void flipper(bool give_flipper_move_to_position, int give_flipper_position = BRAKE, float give_dist_before_flipper = 0, int give_flipper_speed = 0, int give_resting_position = REST, int give_extended_position = EXTEND);
   void flipper_task2(void* ignore);
   void auto_flipper(float give_dist_before_flipper, int give_flipper_position_auton = REST, bool give_flipper_position_move = true, int give_flipper_speed = 100, int give_millis_counter_flipper = 200);
 

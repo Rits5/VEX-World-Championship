@@ -19,6 +19,7 @@ using namespace pros::literals;
 void lift_task(void* ignore){
 
     while(true){
+      
       float error;
       Kp_lift = 0.5;
       float final_power;

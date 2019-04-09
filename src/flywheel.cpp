@@ -63,7 +63,8 @@ void flywheel_task(void*ignore){
   //double shot with light sensor ----- top to middle flag
     while(ball_shot == false && timed_flywheel == false && pros::competition::is_autonomous()){ //run flywheel while the sensor is not detecting a ball
 
-        auto_flipper(true, REST);
+        //auto_flipper(true, REST
+        flipper(true, REST);
         flywheel_set(top_flag_speed); //540
 
           if(light_flywheel.get_value() < LIGHT_FLYWHEEL_THRESHOLD){
@@ -76,13 +77,13 @@ void flywheel_task(void*ignore){
           flywheel_set(middle_flag_speed); //430
           if(brake_timer <= (flywheel_brake/2)){   //100
             brake_timer++;
-            //flipper_motor.move(-80);
-            auto_flipper(0, 0, false, -80);
+            flipper(false, 0, 0, -80);
+            //auto_flipper(0, 0, false, -80);
           }
 
         else {
           //flipper_motor.move_absolute(50, 200);
-          auto_flipper(0, REST);
+          flipper(true, REST);
         }
       }
 
@@ -148,7 +149,7 @@ void flywheel_task(void*ignore){
             if(brake_timer <= (flywheel_brake/2)){   //100
               brake_timer++;
               //flipper_motor.move(-80);
-              flipper(false, 0, -80);
+              flipper(false, 0, 0, -80);
             }
 
             else{

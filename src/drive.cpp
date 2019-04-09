@@ -130,16 +130,18 @@ void drive_pid(float target, unsigned int timeout, int max_speed, float Kp_C){
 
       net_timer = pros::millis() + timeout; //just to initialize net_timer at first
 
-      pid_init(&drive, Kp, Ki, Kd, 30, (12/(4*pi)));
+      pid_init(&drive, Kp, Ki, Kd, 30, (12/(2.75*pi)));
 
         	while((pros::millis() < net_timer) && pros::competition::is_autonomous() && ((initial_millis + failsafe) > pros::millis())){
 
-            encoder_avg = (drive_left_f.get_position() + drive_right_f.get_position() +
-                              drive_left_b.get_position() + drive_right_b.get_position())/4;
+            // encoder_avg = (drive_left_f.get_position() + drive_right_f.get_position() +
+            //                   drive_left_b.get_position() + drive_right_b.get_position())/4;
 
-            float error = ((target - drive_distance_correction)/(4*pi) * RPM200_GEARSET) - encoder_avg;
+            encoder_avg = (encoder_left.get_value() + encoder_right.get_value())/2;
 
-            calculated_power = pid_cal(&drive, ((target - drive_distance_correction)/(4*pi) * RPM200_GEARSET), encoder_avg);
+            float error = ((target - drive_distance_correction)/(2.75*pi) * 360) - encoder_avg;
+
+            calculated_power = pid_cal(&drive, ((target - drive_distance_correction)/(2.75*pi) * 360), encoder_avg);
 
             final_power = power_limit(max_speed, calculated_power);
 
@@ -149,7 +151,7 @@ void drive_pid(float target, unsigned int timeout, int max_speed, float Kp_C){
               right_drive_set(final_power + error_c*Kp_C);
 
 
-        		if (fabs(error) < (1/(4*pi) * RPM200_GEARSET)){	//less than 1 inches
+        		if (fabs(error) < (1/(2.75*pi) * 360)){	//less than 1 inches
         			timer_drive = false;		//start timer to to exit pid loop
               drive.integral = 0;
         		}
@@ -176,9 +178,11 @@ void drive_pid(float target, unsigned int timeout, int max_speed, float Kp_C){
       prev_correction_drive = correction_drive;   //
       correction_drive = gyro.get_value() + prev_correction_drive;
 
-      drive_distance_correction = ((drive_left_f.get_position() + drive_right_f.get_position() +
-                      drive_left_b.get_position() + drive_right_b.get_position())/286.5)
-                      - target + drive_distance_correction;
+      // drive_distance_correction = ((drive_left_f.get_position() + drive_right_f.get_position() +
+      //                 drive_left_b.get_position() + drive_right_b.get_position())/286.5)
+      //                 - target + drive_distance_correction;
+
+      drive_distance_correction = ((encoder_left.get_value() + encoder_right.get_value())/83.34) - target + drive_distance_correction;
 
       printf("correction drive %f\n", correction_drive);
       printf("correction_turn = %1f\n", correction_turn);
@@ -303,12 +307,11 @@ void turn_pid(float degs, unsigned int timeout, float Ki){
 
   pid_init(&swing, Kp, Ki, Kd, 30, 250);
 
-      while((fabs(error_dist) > (1/(4*pi) * RPM200_GEARSET)) && pros::competition::is_autonomous() && ((initial_millis + failsafe_drive) > pros::millis())){   //less than 1in to the target
+      while((fabs(error_dist) > (1/(2.75*pi) * 360)) && pros::competition::is_autonomous() && ((initial_millis + failsafe_drive) > pros::millis())){   //less than 1in to the target
 
-          float encoder_average = ((drive_left_f.get_position() + drive_right_f.get_position() +
-                                drive_left_b.get_position() + drive_right_b.get_position()))/4;
+          float encoder_average = (encoder_left.get_value() + encoder_right.get_value())/2;
 
-          error_dist = ((dist - drive_distance_correction)/(4*pi) * RPM200_GEARSET) - encoder_average;		//wheel size is 4.17 inches
+          error_dist = ((dist - drive_distance_correction)/(2.75*pi) * 360) - encoder_average;		//wheel size is 4.17 inches
 
           if (direction == 1){final_power = 100;}
           else if (direction == -1){final_power = -100;}
@@ -327,8 +330,6 @@ void turn_pid(float degs, unsigned int timeout, float Ki){
 
      printf("encoder avg: %f\n",(drive_left_f.get_position() + drive_right_f.get_position() +
                                 drive_left_b.get_position() + drive_right_b.get_position())/286.5);
-
-     pros::lcd::print(2, "drive forward %1f", (avg/71.61972));
 
      correction_turn = gyro.get_value() + correction_drive;
      prev_correction_drive = correction_drive;

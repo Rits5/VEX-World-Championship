@@ -39,9 +39,6 @@ using namespace pros::literals;
   pros::ADIEncoder encoder_right(RIGHT_ENC_PORT_TOP, RIGHT_ENC_PORT_BOT, REVERSE);
 
 
-
-
-
 //controller
 
   pros::Controller master (pros::E_CONTROLLER_MASTER);

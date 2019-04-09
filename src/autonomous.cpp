@@ -36,21 +36,11 @@ void autonomous() {
 pros::ADIGyro gyro (GYRO_PORT, 0.9510);
 pros::lcd::initialize();
 
-//blue = 3;
-
 reset_error_globals();
 reset_drive_encoders();
 gyro.reset();
-//red = 3;
-auto_flipper(0, REST);
-//turn_pid_encoder(90, 150);
-//turn_pid(90, 150, 0.13);
-// gyro.reset();
-// swing_fast_pid(20, 90);
-// turn_pid(90);
-//brake_timer = 0;
-//auto_flipper(0, 200);
-//auto_double_shot(500, 300, 100);
+
+flipper(true, REST);
 
 
 //red auton front with park------------------------------------------------------------------------
