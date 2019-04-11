@@ -33,9 +33,9 @@ void flipper_backup(float give_dist_before_flipper, bool give_flipper_down, int 
   extern int flipper_speed;
   extern int flipper_position_auton;
 
-  #define REST 1050 //1000
-  #define EXTEND 2850
-  #define BRAKE 360
+  #define REST 900 //1000 //1050 at BCIT
+  #define EXTEND 2700
+  #define BRAKE 380
 
   extern pid_terms flipper_pid;
 

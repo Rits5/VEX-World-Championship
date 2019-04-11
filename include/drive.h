@@ -15,9 +15,10 @@ extern float drive_distance_correction; //stores a value of actual distance trav
 extern float ticks_to_deg;
 
 //gyro containing PID
-void drive_pid(float target, unsigned int timeout = 100, int max_speed = 120, float Kp_C = 0.35);
-void turn_pid(float degs, unsigned int timeout = 150, float Ki = 0.13);
-void swing_pid(float dist, float degs, unsigned int timeout = 150, float Kp_turn = 0.25, int failsafe_turn = 1500);
+void drive_pid(float target, unsigned int timeout = 150, int max_speed = 120, float Kp_C = 0.35);
+void turn_pid(float degs, unsigned int timeout = 150, float Ki = 0.23); //0.13
+void swing_pid(float dist, float degs, unsigned int timeout = 150, float Kp_turn = 0.293, int failsafe_turn = 1500);
+
 void swing_fast_pid(float dist, float degs, unsigned int timeout = 150, float Kp_turn = 0.25, int failsafe_turn = 1500);
 
 //encoder containing PID

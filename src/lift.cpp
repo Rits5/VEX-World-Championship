@@ -19,13 +19,14 @@ using namespace pros::literals;
 void lift_task(void* ignore){
 
     while(true){
-      
+
       float error;
       Kp_lift = 0.5;
       float final_power;
       max_lift_speed = 120;
       target_height = 0;
       lift_delay = 0;
+      int rest_height = -15;
 
       int count = 0;
 
@@ -44,16 +45,18 @@ void lift_task(void* ignore){
 
           lift_motor.move(final_power);
 
-          if (fabs(final_power) < 30){final_power = 0;}
+          //NOT COMMENTED FOR BCIT
+          //if (fabs(final_power) < 5){final_power = 0;} //was < 30 for BCIT
 
             if( (((lift_motor.get_position() - 30) < target_height < (lift_motor.get_position() + 30)) )
-             && target_height != 20){
+             && target_height != rest_height){
 
               count++;
             }
             if(count > (lift_delay/20)){
-              target_height = -10;
-            count = 0;}
+              target_height = rest_height;
+              count = 0;
+            }
 
           pros::delay(20);
 

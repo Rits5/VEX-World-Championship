@@ -33,14 +33,23 @@ void autonomous() {
 //original Kp value for swing turn = 0.25
 
 
-pros::ADIGyro gyro (GYRO_PORT, 0.9510);
+pros::ADIGyro gyro (GYRO_PORT, 0.967742);
 pros::lcd::initialize();
 
 reset_error_globals();
 reset_drive_encoders();
 gyro.reset();
 
-flipper(true, REST);
+// //timed_flywheel = true;
+// flipper(true, 2800);
+// int something = flipper_position;
+// //flipper_position = 2800;
+// pros::delay(2000);
+// auto_double_shot(500, 300, 100);
+// pros::lcd::print(1,"flipper commanded: %d", something);
+
+//blue = 6;
+//red = 0;
 
 
 //red auton front with park------------------------------------------------------------------------
@@ -759,18 +768,19 @@ else if(red == 6){
 
 //testing -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-  else if(blue == 6){
+else if(blue == 6){
 
-    //drive_pid(30);
-    //drive_pid(-30);
+  //flywheel(0, 100);
+  //flipper(true, 500);
+  //turn_pid(45);
+  //turn_pid(90, 150);
+  //pros::lcd::print(1, "gyro turn value: %d", gyro.get_value());
 
-    //auto_flipper(0, EXTEND);
-    auto_double_shot(500, 300, 100);
-    pros::delay(5000);
-    //auto_flipper(0, 0, false);
-    //auto_double_shot(500, 300, 100);
-//flywheel(200, 10000);
-  }
+  //drive_pid(30, 150, 120, 0.35);
+  //swing_fast_pid(15, 90);
+  //swing_fast_pid(15, 90, 0.25, 900);
+  //drive_pid(20);
+}
 
 //flywheel(200, 10000);
 

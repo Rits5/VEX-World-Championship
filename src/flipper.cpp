@@ -3,6 +3,7 @@
 #include "allinit.h"
 #include "motor.h"
 #include "drive.h"
+#include "flywheel.h"
 
 using namespace pros::literals;
 
@@ -27,22 +28,24 @@ pid_terms flipper_pid;
 
 
 void flipper_task(void* ignore){
-  float Kp = 0.085;
-  float Kd = 0.8;
-  float Ki = 0.005;
+  float Kp = 0.085; //0.085 for BCIT
+  float Kd = 0.8; //0.8 for BCIT
+  float Ki = 0.01; //0.005 for BCIT
 
   //pid_terms flipper;
-  pid_init(&flipper_pid, Kp, Ki, Kd, 10, 3000);  //0.06kp and 0.2kd
+  //USED FOR BCIT //pid_init(&flipper_pid, Kp, Ki, Kd, 10, 3000);  //0.06kp and 0.2kd
+  pid_init(&flipper_pid, Kp, Ki, Kd, 30, 500);
 
   while(true){
 
     while(!pros::competition::is_disabled()){
+    //while(pros::competition::is_autonomous()){
       int millis_flipper = millis_counter_flipper; //stores value of millis_counter_flipper given by give_millis_counter_flipper from the auto_flipper function
       millis_counter_flipper = pros::millis() + millis_flipper;
 
         while(fabs((dist_before_flipper/(4*pi) * RPM200_GEARSET)) >=
            fabs((drive_left_f.get_position() + drive_right_f.get_position() + drive_left_b.get_position() +
-           drive_right_b.get_position())/4) && dist_before_flipper > 0.1 && !pros::competition::is_disabled()){
+           drive_right_b.get_position())/4) && fabs(dist_before_flipper) > 0.1 && !pros::competition::is_disabled()){
 
              pros::delay(10);
              millis_counter_flipper = pros::millis() + millis_flipper;
@@ -83,6 +86,8 @@ void flipper(bool give_flipper_move_to_position, int give_flipper_position, floa
   flipper_speed = give_flipper_speed;
   resting_position = give_resting_position;
   extended_position = give_extended_position;
+
+  timed_flywheel = true; ///set flywheel variable to true so it doesn't interfere with the flipper function
 
   int mid_pos = 1500;
 

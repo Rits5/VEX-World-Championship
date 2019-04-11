@@ -20,7 +20,7 @@ void initialize() {
 
 	//pros::lcd::print(7, "initialized");
 
-  pros::ADIGyro gyro (GYRO_PORT, 0.9510); //0.9456 //0.9704 //0.97 //0/96 //0.9550
+  pros::ADIGyro gyro (GYRO_PORT, 0.967742); //0.9456 //0.9704 //0.97 //0/96 //0.9550 //0.9510 at BCIT //0.967742 works //0.9732
 
 //WAS NOT COMMENTED FOR BCIT
   // pros::ADIDigitalIn limit_switch (LIMIT_SWITCH_PORT);
@@ -49,7 +49,7 @@ void initialize() {
   blue = 0;
   max_auton_limit = 6;
 
-
+  pros::lcd::print(7, "initialized");
 }
 
 
@@ -61,7 +61,7 @@ void competition_initialize() { //testing this thing
   // while(pros::competition::is_disabled()){
   //   pros::lcd::register_btn2_cb(on_right_button);
   //   pros::lcd::register_btn0_cb(on_left_button);
-	//
+  //
   //   pros::delay(5);
   // }
 }

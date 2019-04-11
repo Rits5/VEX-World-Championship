@@ -19,8 +19,8 @@ void opcontrol() {
 	switch_mode_flywheel_top = 0;
 	switch_mode_flywheel_bottom = 0;
 
-	pros::ADIGyro gyro (GYRO_PORT, 0.9510);
-	gyro.reset();
+	pros::ADIGyro gyro (GYRO_PORT, 0.967742);
+	//gyro.reset();
 //  pros::ADIUltrasonic sonar (PORT_ECHO, PORT_PING);
 
 	//pros::ADIEncoder encoder_left(LEFT_ENC_PORT_TOP, LEFT_ENC_PORT_BOT, REVERSE);
@@ -115,13 +115,13 @@ void opcontrol() {
 		pros::lcd::print(6, "limit switch %d", limit_switch.get_value());
 		pros::lcd::print(5, "light sen %d", light.get_value());
 
-		//printf("gyro %f\n", gyro.get_value());
+		printf("gyro %f\n", gyro.get_value());
 		pros::lcd::print(3, "gyro: %f", gyro.get_value());
 		pros::lcd::print(4, "flywheel light sensor %d", light_flywheel.get_value());
 
 		//printf("left encoder: %d\n", encoder_left.get_value());
 		//printf("right encoder: %d\n", encoder_right.get_value());
-		printf("pot value %d\n", pot.get_value());
+		//printf("pot value %d\n", pot.get_value());
 
 		pros::lcd::print(7, "left encoder %d", encoder_left.get_value());
 

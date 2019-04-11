@@ -63,7 +63,7 @@ void flywheel_task(void*ignore){
   //double shot with light sensor ----- top to middle flag
     while(ball_shot == false && timed_flywheel == false && pros::competition::is_autonomous()){ //run flywheel while the sensor is not detecting a ball
 
-        //auto_flipper(true, REST
+        //auto_flipper(true, REST);
         flipper(true, REST);
         flywheel_set(top_flag_speed); //540
 
