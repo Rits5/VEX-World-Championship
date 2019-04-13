@@ -34,8 +34,9 @@ void reset_error_globals(void);
 void drive_time(int speed, int timer);
 void turn_time_flag(int speed, int timer);
 
-void turn_pid2(float degs, unsigned int timeout, float Ki);
-void drive_pid2(float target, unsigned int timeout, int max_speed, float Kp_C);
+void turn_pid2(float degs, unsigned int timeout = 150, float Ki = 0.23);
+void drive_pid2(float target, unsigned int timeout = 150, int max_speed = 120, float Kp_C = 0.4);
+void swing_fast_pid2(float dist, float degs, unsigned int timeout = 150, float Kp_turn = 0.25, int failsafe_turn = 1500);
 
 
 typedef struct pid_terms{

@@ -9,6 +9,7 @@
 #include "allinit.h"
 #include "flipper.h"
 #include "lcd.h"
+#include "correction.h"
 
 
 using namespace pros::literals;
@@ -40,6 +41,9 @@ void initialize() {
 
 	pros::task_t flipper_task_init = pros::c::task_create(flipper_task, (void*)NULL, TASK_PRIORITY_DEFAULT,
                               TASK_STACK_DEPTH_DEFAULT, "FLIPPER TASK");
+
+  pros::task_t correction_task_init = pros::c::task_create(correction_task, (void*)NULL, TASK_PRIORITY_DEFAULT,
+                              TASK_STACK_DEPTH_DEFAULT, "CORRECTION TASK");
 
   //flipper_motor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   //flywheel_f.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);

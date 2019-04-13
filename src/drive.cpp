@@ -2,6 +2,7 @@
 #include "drive.h"
 #include "allinit.h"
 #include "motor.h"
+#include "correction.h"
 
 using namespace pros::literals;
 
@@ -110,7 +111,7 @@ void reset_error_globals(void){
 
 void drive_pid(float target, unsigned int timeout, int max_speed, float Kp_C){
 
-  pros::ADIGyro gyro (GYRO_PORT, 0.9510);
+pros::ADIGyro gyro (GYRO_PORT, 0.967742);
   gyro.reset();
   reset_drive_encoders();			//reset encoder values
 
@@ -119,7 +120,7 @@ void drive_pid(float target, unsigned int timeout, int max_speed, float Kp_C){
       //pid_terms drive;
 
       float Kp = 0.21;
-      float Ki = 0.05;
+      float Ki = 0.01;
       float Kd = 0.3;
 
       int failsafe = 2500;    //varible value
@@ -137,7 +138,7 @@ void drive_pid(float target, unsigned int timeout, int max_speed, float Kp_C){
 
       net_timer = pros::millis() + timeout; //just to initialize net_timer at first
 
-      pid_init(&drive, Kp, Ki, Kd, 40, (12/(4*pi)));
+      pid_init(&drive, Kp, Ki, Kd, 40, (12/(4*pi)*RPM200_GEARSET));
 
         	while((pros::millis() < net_timer) && pros::competition::is_autonomous() && ((initial_millis + failsafe) > pros::millis())){
 
@@ -165,7 +166,7 @@ void drive_pid(float target, unsigned int timeout, int max_speed, float Kp_C){
         			net_timer = pros::millis() + timeout;
         		}
 
-      		pros::delay(10);
+      		pros::delay(20);
 
       }
 
@@ -198,10 +199,6 @@ void turn_pid(float degs, unsigned int timeout, float Ki){
   drive_distance_correction = 0;
   pros::ADIGyro gyro (GYRO_PORT, 0.967742);
 
-  // correction_drive = gyro.get_value() + correction_turn - prev_gyro_value;
-  // //prev_correction_turn = correction_turn;
-  // correction_turn = gyro.get_value() + correction_turn - prev_gyro_value;
-
   gyro.reset();
   //pid_terms turn_gyro;
 
@@ -211,7 +208,7 @@ void turn_pid(float degs, unsigned int timeout, float Ki){
 
   float Kp = 0.24; //0.23 on friday //0.24
   float Kd = 1.54; //2.7 on friday //2.65 at BCIT //1.54
-  Ki = 0.23;
+  //Ki = 0.23;
 
   int max_speed = 100;			//caping minimum and maximum speeds for robot
 
@@ -270,50 +267,50 @@ void turn_pid(float degs, unsigned int timeout, float Ki){
   //-------------------------------------------------------------------------------------------------------------
 
 
-  void swing_fast_pid(float dist, float degs, unsigned int timeout, float Kp_turn, int failsafe_turn){
+void swing_fast_pid(float dist, float degs, unsigned int timeout, float Kp_turn, int failsafe_turn){
 
-     int failsafe_drive = 2000;
-     int initial_millis;
-     initial_millis = pros::millis();
+   int failsafe_drive = 2000;
+   int initial_millis;
+   initial_millis = pros::millis();
 
-     degrees_flag = degs*10;
+   degrees_flag = degs*10;
 
-     pros::ADIGyro gyro (GYRO_PORT, 0.9510);
-     gyro.reset();
-     reset_drive_encoders();
+   pros::ADIGyro gyro (GYRO_PORT, 0.967742);
+   gyro.reset();
+   reset_drive_encoders();
 
-   //pid_terms swing;
+ //pid_terms swing;
 
-     float Kp = Kp_turn;
-     float Kd = 1.24;
-     float Ki = 0.07;
+   float Kp = Kp_turn;
+   float Kd = 1.24;
+   float Ki = 0.07;
 
-     float Kp_dist;
+   float Kp_dist;
 
-     float calculated_power;
-     float final_power;
-     unsigned int net_timer;
-     int direction;
+   float calculated_power;
+   float final_power;
+   unsigned int net_timer;
+   int direction;
 
-     float Kp_C = 0.4; //0.3
-     float error_c;
+   float Kp_C = 0.4; //0.3
+   float error_c;
 
-     float encoder_average;
-     int average_left;
-     int average_right;
-     int new_error_left;
-     int new_error_right;
+   float encoder_average;
+   int average_left;
+   int average_right;
+   int new_error_left;
+   int new_error_right;
 
-     int max_speed = 110;
+   int max_speed = 110;
 
-     bool timer_swing = true;			//used to exit out of piD loop after robot reaches error
+   bool timer_swing = true;			//used to exit out of piD loop after robot reaches error
 
-     net_timer = pros::millis() + timeout; //just to initialize net_timer at first
+   net_timer = pros::millis() + timeout; //just to initialize net_timer at first
 
-     if(dist > 0){direction = 1;}
-     else if(dist < 0){direction = -1;}
+   if(dist > 0){direction = 1;}
+   else if(dist < 0){direction = -1;}
 
-     float error_dist = 100;
+   float error_dist = 100;
 
    pid_init(&swing, Kp, Ki, Kd, 30, 250);
 
@@ -332,7 +329,7 @@ void turn_pid(float degs, unsigned int timeout, float Ki){
              left_drive_set(final_power - error_c*Kp_C);
              right_drive_set(final_power + error_c*Kp_C);
 
-           pros::delay(10);
+           pros::delay(20);
 
        }
 
@@ -380,17 +377,17 @@ void turn_pid(float degs, unsigned int timeout, float Ki){
                }
 
                if (degs < 0 && dist > 0){  //when bot is commanded to go left while forward
-                 right_drive_set(fabs(final_power * direction));
+                 right_drive_set(final_power);
                  left_drive_set(new_error_left * Kp_dist);
                }
 
                if (degs > 0 && dist < 0){  //when bot is commanded to go right while going backward
-                 right_drive_set(fabs(final_power) * direction);
+                 right_drive_set(-final_power);
                  left_drive_set(new_error_left * Kp_dist);
                }
 
                if (degs < 0 && dist < 0){  //when bot is commanded to go left while going backward
-                 left_drive_set(fabs(final_power) * direction);
+                 left_drive_set(-final_power);
                  right_drive_set(new_error_right * Kp_dist);
                }
 
@@ -404,20 +401,20 @@ void turn_pid(float degs, unsigned int timeout, float Ki){
              net_timer = pros::millis() + timeout;
            }
 
-           pros::delay(10);
+           pros::delay(20);
        }
 
-       printf("gyro value of turn: %f\n", gyro.get_value());
-       pros::lcd::print(2, "gyro turn after: %f", gyro.get_value());
-       //turn_set(0);
-       drive_set(0);
-       correction_drive = (correction_turn + gyro.get_value() - degrees_flag);
-       prev_correction_turn = correction_turn;
-       correction_turn = (prev_correction_turn + gyro.get_value() - degrees_flag);
+     printf("gyro value of turn: %f\n", gyro.get_value());
+     pros::lcd::print(2, "gyro turn after: %f", gyro.get_value());
+     //turn_set(0);
+     drive_set(0);
+     correction_drive = (correction_turn + gyro.get_value() - degrees_flag);
+     prev_correction_turn = correction_turn;
+     correction_turn = (prev_correction_turn + gyro.get_value() - degrees_flag);
 
-       gyro.reset();
+     gyro.reset();
 
-   }
+ }
 
 
 
@@ -568,7 +565,7 @@ void turn_time_flag(int speed, int timer){
               right_drive_set(final_power);
               }
 
-          pros::delay(10);
+          pros::delay(20);
 
       }
 
@@ -633,17 +630,17 @@ void turn_time_flag(int speed, int timer){
                 }
 
                 if (degs < 0 && dist > 0){  //when bot is commanded to go left while forward
-                  right_drive_set(fabs(final_power * direction));
+                  right_drive_set(final_power);
                   left_drive_set(new_error_left * Kp_dist);
                 }
 
                 if (degs > 0 && dist < 0){  //when bot is commanded to go right while going backward
-                  right_drive_set(fabs(final_power) * direction);
+                  right_drive_set(-final_power);
                   left_drive_set(new_error_left * Kp_dist);
                 }
 
                 if (degs < 0 && dist < 0){  //when bot is commanded to go left while going backward
-                  left_drive_set(fabs(final_power) * direction);
+                  left_drive_set(-final_power);
                   right_drive_set(new_error_right * Kp_dist);
                 }
 
@@ -657,7 +654,7 @@ void turn_time_flag(int speed, int timer){
             net_timer = pros::millis() + timeout;
           }
 
-          pros::delay(10);
+          pros::delay(20);
         //  correction_drive = (correction_turn + gyro.get_value()) - degs;
 
         }
@@ -731,7 +728,7 @@ void turn_pid_encoder(double target, unsigned int timeout){ //makn encoder pid
           timer_turn = false;
         }
 
-      pros::delay(10);
+      pros::delay(20);
       pros::lcd::print(2, "left encoder %d", encoder_left.get_value());
       pros::lcd::print(1, "right encoder %d", encoder_right.get_value());
 
@@ -816,7 +813,7 @@ if (pros::competition::is_autonomous()){
         			net_timer = pros::millis() + timeout;
         		}
 
-  		pros::delay(10);
+  		pros::delay(20);
 
     }
 
@@ -903,7 +900,7 @@ pid_init(&swing_encoder, Kp, Ki, Kd, 50, 250);
           left_drive_set(final_power - error_c*Kp_C);
           right_drive_set(final_power + error_c*Kp_C);
 
-        pros::delay(10);
+        pros::delay(20);
 
     }
 
@@ -962,7 +959,7 @@ pid_init(&swing_encoder, Kp, Ki, Kd, 50, 250);
           net_timer = pros::millis() + timeout;
         }
 
-        pros::delay(10);
+        pros::delay(20);
     }
 
     drive_set(0);
@@ -977,29 +974,21 @@ pid_init(&swing_encoder, Kp, Ki, Kd, 50, 250);
 void turn_pid2(float degs, unsigned int timeout, float Ki){
 
   drive_distance_correction = 0;
-  pros::ADIGyro gyro (GYRO_PORT, 0.967742);
+  //pros::ADIGyro gyro (GYRO_PORT, 0.967742);
 
-  //prev_degs = degs;
   float new_degs = degs*10;
   new_degs = new_degs + prev_degs;
   prev_degs = new_degs;
-
-  if(reset_gyro == true){
-    gyro.reset();
-  }
-
-  reset_gyro = false;
-  //gyro.reset();
 
   int failsafe = 1200; //still needs testing
   int initial_millis = pros::millis();
   degrees_flag = degs*10;
 
   float Kp = 0.24; //0.23 on friday //0.24
-  float Kd = 1.53; //2.7 on friday //2.65 at BCIT //1.54
+  float Kd = 1.54; //2.7 on friday //2.65 at BCIT //1.54
   //Ki = 0.23;
 
-  int max_speed = 110;			//caping minimum and maximum speeds for robot
+  int max_speed = 100;			//caping minimum and maximum speeds for robot
 
   float calculated_power;
   float final_power;
@@ -1016,9 +1005,9 @@ void turn_pid2(float degs, unsigned int timeout, float Ki){
 
       while((pros::millis() < net_timer) && pros::competition::is_autonomous() && ((initial_millis + failsafe) > pros::millis())){
 
-        float error = new_degs - gyro.get_value();
+        float error = new_degs - gyro_value;
 
-        calculated_power = pid_cal(&turn_gyro, new_degs, gyro.get_value());
+        calculated_power = pid_cal(&turn_gyro, new_degs, gyro_value);
 
         final_power = power_limit(max_speed, calculated_power);
 
@@ -1037,8 +1026,6 @@ void turn_pid2(float degs, unsigned int timeout, float Ki){
       }
 
     turn_set(0);
-    //gyro.reset();
-    //prev_degs = 0;
     pros::lcd::print(0, "correction_turn: %f", correction_turn);
 
   }
@@ -1047,21 +1034,14 @@ void turn_pid2(float degs, unsigned int timeout, float Ki){
 
 void drive_pid2(float target, unsigned int timeout, int max_speed, float Kp_C){
 
-  pros::ADIGyro gyro (GYRO_PORT, 0.967742);
+  //pros::ADIGyro gyro (GYRO_PORT, 0.967742);
 
   reset_drive_encoders();			//reset encoder values
 
     if (pros::competition::is_autonomous()){
 
-      //pid_terms drive;
-      if(reset_gyro == true){
-        gyro.reset();
-      }
-
-      reset_gyro = false;
-
       float Kp = 0.21;
-      float Ki = 0.05;
+      float Ki = 0.01;
       float Kd = 0.26;
 
       int failsafe = 2500;    //varible value
@@ -1079,28 +1059,26 @@ void drive_pid2(float target, unsigned int timeout, int max_speed, float Kp_C){
 
       net_timer = pros::millis() + timeout; //just to initialize net_timer at first
 
-      pid_init(&drive, Kp, Ki, Kd, 40, (12/(2.75*pi)));
+      pid_init(&drive, Kp, Ki, Kd, 40, (12/(4*pi)*RPM200_GEARSET));
 
         	while((pros::millis() < net_timer) && pros::competition::is_autonomous() && ((initial_millis + failsafe) > pros::millis())){
 
-            // encoder_avg = (drive_left_f.get_position() + drive_right_f.get_position() +
-            //                   drive_left_b.get_position() + drive_right_b.get_position())/4;
+            encoder_avg = (drive_left_f.get_position() + drive_right_f.get_position() +
+                              drive_left_b.get_position() + drive_right_b.get_position())/4;
 
-            encoder_avg = (encoder_left.get_value() + encoder_right.get_value())/2;
+            float error = ((target - drive_distance_correction)/(4*pi) * RPM200_GEARSET) - encoder_avg;
 
-            float error = ((target - drive_distance_correction)/(2.75*pi) * 360) - encoder_avg;
-
-            calculated_power = pid_cal(&drive, ((target - drive_distance_correction)/(2.75*pi) * 360), encoder_avg);
+            calculated_power = pid_cal(&drive, ((target - drive_distance_correction)/(4*pi) * RPM200_GEARSET), encoder_avg);
 
             final_power = power_limit(max_speed, calculated_power);
 
-              error_c = gyro.get_value() - prev_degs;
+              error_c = gyro_value - prev_degs;
 
               left_drive_set(final_power - error_c*Kp_C);
               right_drive_set(final_power + error_c*Kp_C);
 
 
-        		if (fabs(error) < (1/(2.75*pi) * 360)){	//less than 1 inches
+        		if (fabs(error) < (1/(4*pi) * RPM200_GEARSET)){	//less than 1 inches
         			timer_drive = false;		//start timer to to exit pid loop
               drive.integral = 0;
         		}
@@ -1122,6 +1100,148 @@ void drive_pid2(float target, unsigned int timeout, int max_speed, float Kp_C){
       printf("correction_turn = %1f\n", correction_turn);
       pros::lcd::print(0, "correction_turn = %1f\n", correction_turn);
 }
+
+
+
+
+
+void swing_fast_pid2(float dist, float degs, unsigned int timeout, float Kp_turn, int failsafe_turn){
+
+   int failsafe_drive = 2000;
+   int initial_millis;
+   initial_millis = pros::millis();
+
+   //pros::ADIGyro gyro (GYRO_PORT, 0.967742);
+   reset_drive_encoders();
+
+   float Kp = Kp_turn;
+   float Kd = 1.24;
+   float Ki = 0.07;
+
+   float Kp_dist;
+
+   float calculated_power;
+   float final_power;
+   unsigned int net_timer;
+   int direction;
+
+   float Kp_C = 0.4; //0.3
+   float error_c;
+
+   float encoder_average;
+   int average_left;
+   int average_right;
+   int new_error_left;
+   int new_error_right;
+
+   int max_speed = 110;
+
+   bool timer_swing = true;			//used to exit out of piD loop after robot reaches error
+
+   net_timer = pros::millis() + timeout; //just to initialize net_timer at first
+
+   if(dist > 0){direction = 1;}
+   else if(dist < 0){direction = -1;}
+
+   float error_dist = 100; //initialize error_dist with a random number
+
+   pid_init(&swing, Kp, Ki, Kd, 30, 250);
+
+       while((fabs(error_dist) > (1/(4*pi) * RPM200_GEARSET)) && pros::competition::is_autonomous() && ((initial_millis + failsafe_drive) > pros::millis())){   //less than 1in to the target
+
+           float encoder_average = ((drive_left_f.get_position() + drive_right_f.get_position() +
+                                 drive_left_b.get_position() + drive_right_b.get_position()))/4;
+
+           error_dist = ((dist - drive_distance_correction)/(4*pi) * RPM200_GEARSET) - encoder_average;		//wheel size is 4.17 inches
+
+           if (direction == 1){final_power = 100;}
+           else if (direction == -1){final_power = -100;}
+
+             error_c = gyro_value - prev_degs;
+
+             left_drive_set(final_power - error_c*Kp_C);
+             right_drive_set(final_power + error_c*Kp_C);
+
+           pros::delay(20);
+
+       }
+
+       float avg = (drive_left_f.get_position() + drive_right_f.get_position() +
+                   drive_left_b.get_position() + drive_right_b.get_position())/4;
+
+      pros::lcd::print(2, "drive forward %1f", (avg/71.61972));
+
+      drive_distance_correction = 0;
+      drive_set(0);
+
+     //------------------------------------------------TURN PART OF LOOP- --------------------------------------------
+
+     float new_degs = degs*10;
+     new_degs = new_degs + prev_degs;
+     prev_degs = new_degs;
+
+     reset_drive_encoders();			//reset encoder values
+
+     net_timer = pros::millis() + timeout;
+     initial_millis = pros::millis();
+
+     while ((pros::millis() < net_timer) && pros::competition::is_autonomous() && ((initial_millis + failsafe_turn) > pros::millis())){
+
+       Kp_dist = 1.0;
+
+         float error_turn = new_degs - gyro_value;
+
+         calculated_power = pid_cal(&swing, new_degs, gyro_value);
+
+         final_power = power_limit(max_speed, calculated_power);
+
+           new_error_left = 0 - (drive_left_f.get_position() + drive_left_b.get_position())/2;
+           new_error_right = 0 - (drive_right_f.get_position() + drive_right_b.get_position())/2;
+
+               if (degs > 0 && dist > 0){  //when bot is commanded to go right while going forward
+                 left_drive_set(final_power);
+                 right_drive_set(new_error_right * Kp_dist);
+               }
+
+               if (degs < 0 && dist > 0){  //when bot is commanded to go left while forward
+                 right_drive_set(final_power);
+                 left_drive_set(new_error_left * Kp_dist);
+               }
+
+               if (degs > 0 && dist < 0){  //when bot is commanded to go right while going backward
+                 right_drive_set(-final_power);
+                 left_drive_set(new_error_left * Kp_dist);
+               }
+
+               if (degs < 0 && dist < 0){  //when bot is commanded to go left while going backward
+                 left_drive_set(-final_power);
+                 right_drive_set(new_error_right * Kp_dist);
+               }
+
+
+         if (fabs(error_turn) < 10){ //15 //start timer when less than 1 degree
+           swing.integral = 0; //variable
+           timer_swing = false;
+         }
+
+           if (timer_swing){
+             net_timer = pros::millis() + timeout;
+           }
+
+           pros::delay(20);
+       }
+
+     printf("gyro value of turn: %f\n", gyro.get_value());
+     pros::lcd::print(2, "gyro turn after: %f", gyro.get_value());
+     //turn_set(0);
+     drive_set(0);
+     correction_drive = (correction_turn + gyro.get_value() - degrees_flag);
+     prev_correction_turn = correction_turn;
+     correction_turn = (prev_correction_turn + gyro.get_value() - degrees_flag);
+
+     gyro.reset();
+
+ }
 
 
 
