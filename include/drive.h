@@ -7,6 +7,8 @@ extern float correction_turn;  //stored value that makes turns more accurate
 extern float degrees_flag;  //targeted turn commandes given in PID loops
 extern float prev_correction_turn; //stored value in a timespace just before the correction_turn
 
+extern float prev_gyro_value;
+
 extern float correction_drive; //stored value that keeps robot driving straight overtime
 extern float prev_correction_drive;  //stored value in a timespace just before the correction_drive
 extern float drive_distance_correction; //stores a value of actual distance travelled and it is compared to the given target to accumulate
@@ -15,7 +17,7 @@ extern float drive_distance_correction; //stores a value of actual distance trav
 extern float ticks_to_deg;
 
 //gyro containing PID
-void drive_pid(float target, unsigned int timeout = 150, int max_speed = 120, float Kp_C = 0.35);
+void drive_pid(float target, unsigned int timeout = 150, int max_speed = 120, float Kp_C = 0.4);
 void turn_pid(float degs, unsigned int timeout = 150, float Ki = 0.23); //0.13
 void swing_pid(float dist, float degs, unsigned int timeout = 150, float Kp_turn = 0.293, int failsafe_turn = 1500);
 
@@ -31,6 +33,9 @@ void reset_drive_encoders(void);
 void reset_error_globals(void);
 void drive_time(int speed, int timer);
 void turn_time_flag(int speed, int timer);
+
+void turn_pid2(float degs, unsigned int timeout, float Ki);
+void drive_pid2(float target, unsigned int timeout, int max_speed, float Kp_C);
 
 
 typedef struct pid_terms{
@@ -60,6 +65,9 @@ extern pid_terms swing_encoder;
  void pid_init(pid_terms *pid, float Kp, float Ki, float Kd, float integral_limit, float integral_active_zone);
  float pid_cal(pid_terms *pid, float target, float sensor);
  float power_limit(float allowed_speed, float actual_speed);
+
+ extern float prev_degs;
+ extern bool reset_gyro;
 
 
 #endif

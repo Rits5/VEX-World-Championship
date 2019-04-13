@@ -28,13 +28,17 @@ pid_terms flipper_pid;
 
 
 void flipper_task(void* ignore){
-  float Kp = 0.085; //0.085 for BCIT
-  float Kd = 0.8; //0.8 for BCIT
-  float Ki = 0.01; //0.005 for BCIT
+  float Kp = 0.15; //0.16
+  float Kd = 0.15; //0.12
+  float Ki = 0.005;
+
+  // float Kp = 0.085; //0.085 for BCIT
+  // float Kd = 0.60; //0.8 for BCIT
+  // float Ki = 0.005; //0.005 for BCIT
 
   //pid_terms flipper;
   //USED FOR BCIT //pid_init(&flipper_pid, Kp, Ki, Kd, 10, 3000);  //0.06kp and 0.2kd
-  pid_init(&flipper_pid, Kp, Ki, Kd, 30, 500);
+  pid_init(&flipper_pid, Kp, Ki, Kd, 10, 500); //30 and 500
 
   while(true){
 
@@ -53,9 +57,18 @@ void flipper_task(void* ignore){
 
           if(flipper_move_to_position == true){
 
-              if(pot.get_value() > REST){
+              if(pot.get_value() < REST){
                 flipper_pid.integral = 0;
               }
+
+              // if(pot.get_value() > 2000){
+              //   pid_init(&flipper_pid, 0.09, Ki, Kd, 20, 300);
+              // }
+              //
+              // if(pot.get_value() < 2000){
+              //   pid_init(&flipper_pid, Kp, Ki, Kd, 20, 300);
+              // }
+
             float calculated_power = pid_cal(&flipper_pid, flipper_position, pot.get_value());
             float final_power = power_limit(80, calculated_power);
 
@@ -77,7 +90,9 @@ void flipper_task(void* ignore){
 }
 
 
-void flipper(bool give_flipper_move_to_position, int give_flipper_position, float give_dist_before_flipper, int give_flipper_speed, int give_resting_position, int give_extended_position){
+void flipper(bool give_flipper_move_to_position, int give_flipper_position, float give_dist_before_flipper, int give_flipper_speed, bool give_timed_flywheel, int give_resting_position, int give_extended_position){
+
+  timed_flywheel = give_timed_flywheel;
 
   flipper_position = give_flipper_position;
   flipper_move_to_position = give_flipper_move_to_position;
@@ -87,7 +102,7 @@ void flipper(bool give_flipper_move_to_position, int give_flipper_position, floa
   resting_position = give_resting_position;
   extended_position = give_extended_position;
 
-  timed_flywheel = true; ///set flywheel variable to true so it doesn't interfere with the flipper function
+  //timed_flywheel = true; ///set flywheel variable to true so it doesn't interfere with the flipper function
 
   int mid_pos = 1500;
 

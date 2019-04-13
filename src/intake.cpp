@@ -44,7 +44,7 @@ outtake = false;
 
            while(fabs((dist_before_intake/(4*pi) * RPM200_GEARSET)) >=
               fabs((drive_left_f.get_position() + drive_right_f.get_position() + drive_left_b.get_position() +
-              drive_right_b.get_position())/4)  && pros::competition::is_autonomous()){
+              drive_right_b.get_position())/4)  && pros::competition::is_autonomous() && fabs(dist_before_intake) > 0.1){
 
                 pros::delay(5);
             }
