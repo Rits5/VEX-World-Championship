@@ -1214,7 +1214,7 @@ void swing_fast_pid(float dist, float degs, unsigned int timeout, float Kp_turn,
                }
 
                if (degs < 0 && dist < 0){  //when bot is commanded to go left while going backward
-                 left_drive_set(-final_power);
+                 left_drive_set(final_power);
                  right_drive_set(new_error_right * Kp_dist);
                }
 
