@@ -28,9 +28,10 @@ pid_terms flipper_pid;
 
 
 void flipper_task(void* ignore){
-  float Kp = 0.15; //0.16
-  float Kd = 0.15; //0.12
+  float Kp = 0.13; //0.15
+  float Kd = 0.15; //0.15
   float Ki = 0.005;
+  float final_power;
 
   // float Kp = 0.085; //0.085 for BCIT
   // float Kd = 0.60; //0.8 for BCIT
@@ -70,6 +71,9 @@ void flipper_task(void* ignore){
               // }
 
             float calculated_power = pid_cal(&flipper_pid, flipper_position, pot.get_value());
+
+            // if(pros::competition::is_autonomous()){final_power = power_limit(80, calculated_power);}
+            // if(!pros::competition::is_autonomous()){final_power = power_limit(100, calculated_power);}
             float final_power = power_limit(80, calculated_power);
 
             flipper_motor.move(final_power);

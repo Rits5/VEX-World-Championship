@@ -109,7 +109,7 @@ void reset_error_globals(void){
 }
 
 
-void drive_pid(float target, unsigned int timeout, int max_speed, float Kp_C){
+void drive_pid2(float target, unsigned int timeout, int max_speed, float Kp_C){
 
 pros::ADIGyro gyro (GYRO_PORT, 0.967742);
   gyro.reset();
@@ -194,7 +194,7 @@ pros::ADIGyro gyro (GYRO_PORT, 0.967742);
 
 
 
-void turn_pid(float degs, unsigned int timeout, float Ki){
+void turn_pid2(float degs, unsigned int timeout, float Ki){
 
   drive_distance_correction = 0;
   pros::ADIGyro gyro (GYRO_PORT, 0.967742);
@@ -267,7 +267,7 @@ void turn_pid(float degs, unsigned int timeout, float Ki){
   //-------------------------------------------------------------------------------------------------------------
 
 
-void swing_fast_pid(float dist, float degs, unsigned int timeout, float Kp_turn, int failsafe_turn){
+void swing_fast_pid2(float dist, float degs, unsigned int timeout, float Kp_turn, int failsafe_turn){
 
    int failsafe_drive = 2000;
    int initial_millis;
@@ -329,7 +329,7 @@ void swing_fast_pid(float dist, float degs, unsigned int timeout, float Kp_turn,
              left_drive_set(final_power - error_c*Kp_C);
              right_drive_set(final_power + error_c*Kp_C);
 
-           pros::delay(20);
+           pros::delay(10);
 
        }
 
@@ -971,7 +971,7 @@ pid_init(&swing_encoder, Kp, Ki, Kd, 50, 250);
 
 
 
-void turn_pid2(float degs, unsigned int timeout, float Ki){
+void turn_pid(float degs, unsigned int timeout, float Ki){
 
   drive_distance_correction = 0;
   //pros::ADIGyro gyro (GYRO_PORT, 0.967742);
@@ -1032,7 +1032,7 @@ void turn_pid2(float degs, unsigned int timeout, float Ki){
 
 
 
-void drive_pid2(float target, unsigned int timeout, int max_speed, float Kp_C){
+void drive_pid(float target, unsigned int timeout, int max_speed, float Kp_C){
 
   //pros::ADIGyro gyro (GYRO_PORT, 0.967742);
 
@@ -1042,9 +1042,9 @@ void drive_pid2(float target, unsigned int timeout, int max_speed, float Kp_C){
 
       float Kp = 0.21;
       float Ki = 0.01;
-      float Kd = 0.26;
+      float Kd = 0.265;
 
-      int failsafe = 2500;    //varible value
+      int failsafe = 3000;    //varible value
       int initial_millis = pros::millis();
 
       float final_power;
@@ -1105,7 +1105,7 @@ void drive_pid2(float target, unsigned int timeout, int max_speed, float Kp_C){
 
 
 
-void swing_fast_pid2(float dist, float degs, unsigned int timeout, float Kp_turn, int failsafe_turn){
+void swing_fast_pid(float dist, float degs, unsigned int timeout, float Kp_turn, int failsafe_turn){
 
    int failsafe_drive = 2000;
    int initial_millis;
@@ -1162,7 +1162,7 @@ void swing_fast_pid2(float dist, float degs, unsigned int timeout, float Kp_turn
              left_drive_set(final_power - error_c*Kp_C);
              right_drive_set(final_power + error_c*Kp_C);
 
-           pros::delay(20);
+           pros::delay(10);
 
        }
 
@@ -1204,7 +1204,7 @@ void swing_fast_pid2(float dist, float degs, unsigned int timeout, float Kp_turn
                }
 
                if (degs < 0 && dist > 0){  //when bot is commanded to go left while forward
-                 right_drive_set(final_power);
+                 right_drive_set(-final_power);
                  left_drive_set(new_error_left * Kp_dist);
                }
 
@@ -1231,15 +1231,15 @@ void swing_fast_pid2(float dist, float degs, unsigned int timeout, float Kp_turn
            pros::delay(20);
        }
 
-     printf("gyro value of turn: %f\n", gyro.get_value());
-     pros::lcd::print(2, "gyro turn after: %f", gyro.get_value());
-     //turn_set(0);
-     drive_set(0);
-     correction_drive = (correction_turn + gyro.get_value() - degrees_flag);
-     prev_correction_turn = correction_turn;
-     correction_turn = (prev_correction_turn + gyro.get_value() - degrees_flag);
-
-     gyro.reset();
+     // printf("gyro value of turn: %f\n", gyro.get_value());
+     // pros::lcd::print(2, "gyro turn after: %f", gyro.get_value());
+     // //turn_set(0);
+     // drive_set(0);
+     // correction_drive = (correction_turn + gyro.get_value() - degrees_flag);
+     // prev_correction_turn = correction_turn;
+     // correction_turn = (prev_correction_turn + gyro.get_value() - degrees_flag);
+     //
+     // //gyro.reset();
 
  }
 
