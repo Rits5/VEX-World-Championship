@@ -26,7 +26,7 @@ void lift_task(void* ignore){
       max_lift_speed = 120;
       target_height = 0;
       lift_delay = 0;
-      int rest_height = -15;
+      int rest_height = -30;
 
       int count = 0;
 

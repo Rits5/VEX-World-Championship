@@ -420,6 +420,7 @@ void swing_fast_pid2(float dist, float degs, unsigned int timeout, float Kp_turn
 
 
 void drive_time(int speed, int timer){
+  drive_distance_correction = 0;
   drive_set(speed);
   pros::delay(timer);
   drive_set(0);
@@ -980,7 +981,7 @@ void turn_pid(float degs, unsigned int timeout, float Ki){
   new_degs = new_degs + prev_degs;
   prev_degs = new_degs;
 
-  int failsafe = 1200; //still needs testing
+  int failsafe = 1500; //still needs testing
   int initial_millis = pros::millis();
   degrees_flag = degs*10;
 
@@ -1094,7 +1095,9 @@ void drive_pid(float target, unsigned int timeout, int max_speed, float Kp_C){
     }
 
     	drive_set(0);		//set drive to 0 power
-      drive_distance_correction = ((encoder_left.get_value() + encoder_right.get_value())/83.34) - target + drive_distance_correction;
+      drive_distance_correction = ((drive_left_f.get_position() + drive_right_f.get_position() +
+                      drive_left_b.get_position() + drive_right_b.get_position())/286.5)
+                      - target + drive_distance_correction;
 
       printf("correction drive %f\n", correction_drive);
       printf("correction_turn = %1f\n", correction_turn);
@@ -1187,7 +1190,7 @@ void swing_fast_pid(float dist, float degs, unsigned int timeout, float Kp_turn,
 
      while ((pros::millis() < net_timer) && pros::competition::is_autonomous() && ((initial_millis + failsafe_turn) > pros::millis())){
 
-       Kp_dist = 1.0;
+       Kp_dist = 1.5;
 
          float error_turn = new_degs - gyro_value;
 

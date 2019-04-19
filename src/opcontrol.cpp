@@ -81,7 +81,7 @@ void opcontrol() {
 
 	//double shot with light sensor
 		if (master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) == 1){
-			double_shot_setup(570, 407, 146); //front double shot //134
+			double_shot_setup(570, 406, 128); //front double shot //146
 			ball_shot = false; //setting to false to reset sensor into thinking ball has not been shot yet
 			sensor_double_shot = true; //turns on sensor based double shot mode
 			double_shot = 1;
@@ -89,7 +89,15 @@ void opcontrol() {
 		}
 
 		else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) == 1){
-			double_shot_setup(520, 428, 86); //back double shot //was 65
+			double_shot_setup(520, 427, 81); //back double shot //was 86 //428 power
+			ball_shot = false; //setting to false to reset sensor into thinking ball has not been shot yet
+			sensor_double_shot = true; //turns on sensor based double shot mode
+			double_shot = 1;
+			brake_timer = 0;
+		}
+
+		else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) == 1){
+			double_shot_setup(525, 470, 0); //back double shot //was 86 //467 power
 			ball_shot = false; //setting to false to reset sensor into thinking ball has not been shot yet
 			sensor_double_shot = true; //turns on sensor based double shot mode
 			double_shot = 1;
@@ -97,13 +105,18 @@ void opcontrol() {
 		}
 
 	//flipper controls
-		else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) == 1){
+		//else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) == 1){
+		if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) == 1){
 			button_pressed = true;
 			double_shot = 0; //disable double shot if its on
 			ball_shot = false; //setting to false to reset sensor into thinking ball has not been shot yet
 			sensor_double_shot = false; //turns off sensor based double shot mode
 
 			//testing new flipper code
+			// flipper_counter++;
+			// if(flipper_counter > 1){
+			// 	flipper_counter = 0;
+			// }
 			flipper(true);
 
 		}

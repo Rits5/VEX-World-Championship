@@ -33,14 +33,14 @@ void flipper_backup(float give_dist_before_flipper, bool give_flipper_down, int 
   extern int flipper_speed;
   extern int flipper_position_auton;
 
-  #define REST 900 //900
-  #define EXTEND 2650
-  #define BRAKE 370
-  #define FLIP 2000
+  #define REST 1100 //900 //1080 //1100
+  #define EXTEND 2810 //2650
+  #define BRAKE 400
+  #define FLIP 2080
 
   extern pid_terms flipper_pid;
 
-  void flipper(bool give_flipper_move_to_position, int give_flipper_position = BRAKE, float give_dist_before_flipper = 0, int give_flipper_speed = 0, bool give_timed_flywheel = true, int give_resting_position = REST, int give_extended_position = EXTEND);
+  void flipper(bool give_flipper_move_to_position, int give_flipper_position = BRAKE, float give_dist_before_flipper = 0, int give_flipper_speed = 0, bool give_timed_flywheel = true, int give_resting_position = REST, int give_extended_position = EXTEND - 500);
   void flipper_task2(void* ignore);
   void auto_flipper(float give_dist_before_flipper, int give_flipper_position_auton = REST, bool give_flipper_position_move = true, int give_flipper_speed = 100, int give_millis_counter_flipper = 200);
 

@@ -16,6 +16,8 @@ extern bool outtake;
 extern bool light_sen_flag;
 extern unsigned int millis_counter_intake;
 
+extern int flipper_counter;
+
 void intake (int give_speed_for_intake, int give_time_for_intake);
 void intake_limit (bool give_intake_flag, float give_dist_before_intake);
 
