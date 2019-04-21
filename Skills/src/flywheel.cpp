@@ -45,129 +45,34 @@ using namespace pros::literals;
   int flywheel_brake;
 
   bool timed_flywheel;
+  bool run_flywheel;
 
 
 
 void flywheel_task(void*ignore){
   while(true){
 
-//autonomous part
-    while(pros::competition::is_autonomous()){
-      while((pros::millis() < millis_counter_flywheel) && pros::competition::is_autonomous() && timed_flywheel == true){
-        flywheel_set(rpm_task);
-        pros::delay(5);
-      }
-  //  flywheel_set(rpm_task); was not commented for provincials
-
-
-  //double shot with light sensor ----- top to middle flag
-    while(ball_shot == false && timed_flywheel == false && pros::competition::is_autonomous()){ //run flywheel while the sensor is not detecting a ball
-
-        //auto_flipper(true, REST);
-        flipper(true, REST, 0, 0, false);
-        flywheel_set(top_flag_speed); //540
-
-          if(light_flywheel.get_value() < LIGHT_FLYWHEEL_THRESHOLD){
-            ball_shot = true;
-          }
-          pros::delay(5);
-      }
-
-        if(ball_shot == true){
-          flywheel_set(middle_flag_speed); //430
-          if(brake_timer <= (flywheel_brake/2)){   //100
-            brake_timer++;
-            flipper(false, 0, 0, -80, false);
-            //auto_flipper(0, 0, false, -80);
-          }
-
-        else {
-          //flipper_motor.move_absolute(50, 200);
-          flipper(true, REST);
-        }
-      }
-
-    pros::delay(2);
-  }
-
-//driver control part
-    while(!pros::competition::is_autonomous()){
-
-      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
-
-          double_shot = 0; //disable double shot
-
-          //sensor based double shot variables
-          ball_shot = false; //setting to false to reset sensor into thinking ball has not been shot yet
-          sensor_double_shot = false; //turns off sensor based double shot mode
-
-          if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
-
-            flywheel_commanded = 570; //190
-            double_shot = 0;
-          }
-
-            while((master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1) && !pros::competition::is_autonomous()){
-
-              flywheel_slew += 30;
-              if(flywheel_slew > flywheel_commanded){flywheel_slew = flywheel_commanded;}
-
-              flywheel_set(flywheel_slew);
-              pros::delay(5);
-            }
-          }
-
-
-
-  //double shot - driver control
-    else if (double_shot == 1 && master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 0 && !pros::competition::is_autonomous()){
-      //flipper_motor.move_absolute(50, 200);
-      flipper(true, REST);
-
-      //double shot with light sensor ----- top to middle flag
-      while (sensor_double_shot == true && master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 0 && !pros::competition::is_autonomous()){
-
-        while(ball_shot == false && master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 0 && double_shot == 1 && !pros::competition::is_autonomous()){ //run flywheel while the sensor is not detecting a ball
-            flywheel_set(top_flag_speed); //540
-
-            if(light_flywheel.get_value() < LIGHT_FLYWHEEL_THRESHOLD){
-              ball_shot = true;
-            }
-            pros::delay(5);
-          }
-
-          if(ball_shot == true){
-            flywheel_set(middle_flag_speed); //430
-
-            if(brake_timer <= (flywheel_brake/2)){   //100
-              brake_timer++;
-              //flipper_motor.move(-80);
-              flipper(false, 0, 0, -80);
-            }
-
-            else{
-              //flipper_motor.move_absolute(50, 200);
-              flipper(true, REST);
-            }
-          }
-
-        pros::delay(2);
-      }
+    if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
+      run_flywheel = true;
+      flywheel_set(0);
     }
 
+    else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 0 && run_flywheel == true){
 
-      //else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 0 && switch_mode_flywheel_top == 0 && switch_mode_flywheel_bottom == 0){
-      else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 0){
-          flywheel_set(570);
-          // flywheel_slew -= 50;
-          // flywheel_commanded = 0;
-          // if(flywheel_slew < 0){flywheel_slew = 0;}
-      }
-      pros::delay(5);
+      flywheel_slew += 30;
+      if(flywheel_slew > flywheel_commanded){flywheel_slew = flywheel_commanded;}
+
+      flywheel_set(flywheel_slew);
     }
+
+    else if(run_flywheel == false){
+      flywheel_set(0);
+    }
+
   pros::delay(5);
 }
 }
+
 
 
 

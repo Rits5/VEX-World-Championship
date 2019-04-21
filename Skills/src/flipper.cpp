@@ -58,11 +58,15 @@ void flipper_task(void* ignore){
              millis_counter_flipper = pros::millis() + millis_flipper;
         }
 
-          if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) == 1 && !pros::competition::is_autonomous()){
+          if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1 && !pros::competition::is_autonomous()){
+            flipper_position = EXTEND;
+          }
+
+          else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) == 1 && !pros::competition::is_autonomous()){
             flipper_position = EXTEND - 500;
           }
 
-          else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) == 0 && !pros::competition::is_autonomous()){
+          else{
             flipper_position = REST;
           }
 

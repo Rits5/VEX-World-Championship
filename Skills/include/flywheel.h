@@ -46,6 +46,7 @@ extern int switch_mode_flywheel_top;
   extern int brake_timer;
 
   extern bool timed_flywheel;
+  extern bool run_flywheel;
 
   void double_shot_setup(int give_top_flag_speed, int give_middle_flag_speed, int give_flywheel_brake);
 

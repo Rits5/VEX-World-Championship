@@ -40,16 +40,8 @@ reset_error_globals();
 reset_drive_encoders();
 gyro.reset();
 
-// //timed_flywheel = true;
-// flipper(true, 2800);
-// int something = flipper_position;
-// //flipper_position = 2800;
-// pros::delay(2000);
-// auto_double_shot(500, 300, 100);
-// pros::lcd::print(1,"flipper commanded: %d", something);
-
-blue = 0;
-red = 7;
+// blue = 0;
+// red = 7;
 
 
 //red auton front park------------------------------------------------------------------------
@@ -272,136 +264,24 @@ else if(red == 3){
 
 
 
-//red auton back park quick------------------------------------------------------------------------
+//red auton back cap v1------------------------------------------------------------------------
 else if(red == 4){
 
-  pros::lcd::print(0, "timer 1 %d", pros::millis());
-
-  intake_limit(true, 25); //intake after going 25 inches
-  flywheel(468, 10000);   //start flywheel in background
-  drive_pid(45, 250);     //get the ball under the cap
-
-  pros::delay(500);
-
-  drive_pid(-11, 250);    //drive back to starting tile to shoot balls
-  turn_pid(-79);     //face the flags
-
-  //drive_pid(2.5, 100);
-  pros::delay(1000);
-  intake(120, 350);       //first ball shot
-  //turn_pid(0, 250);
-  pros::delay(350);
-
-  flywheel(524, 15000);  //150
-
-  pros::delay(1500);
-  intake(120, 750);
-
-  pros::delay(750);
-
-  reset_error_globals();
-  drive_pid(-24);
-
-  turn_pid(79);
-
-  intake(-120, 2000);
-  drive_pid(20, 100, 80);  //flip cap 1
-
-  drive_pid(-17.2, 100, 120);
-
-  turn_pid(-90);
-  drive_pid(33);
-
-  intake(120, 1500);
-  drive_time(50, 500);
-  drive_pid(22.5, 1000); //parked
-
-}
-
-
-
-
-//red auton back counter cap------------------------------------------------------------------------------------------
-else if(red == 5){
-
-  pros::lcd::print(0, "timer 1 %d", pros::millis());
-
   intake_limit(true, 0);
-  //flywheel(485, 5000);  //495
-  auto_double_shot(525, 470, 120);
-  drive_pid(28);
-  turn_pid(-73.5);
-
-  intake(120, 400);
-  pros::delay(400);
-
-  flywheel(470, 5000);
-  intake_limit(true, 0);
-  drive_pid(5);    //collect ball from platform //20 speed
-
-  flipper(true, EXTEND - 200);
-  drive_pid(-7);
-
-  pros::delay(750);
-
-  intake_limit(false, 0);
-  intake(120, 400);
-  pros::delay(400);     //shot middle 2 flags
-
-  turn_pid(73.5);
-  reset_error_globals();
-
-  flywheel(555, 10000);   //563
-
-  intake_limit(true, 0);
-  drive_pid(23);
-
-  pros::delay(500);
-  drive_pid(-12.5);
-  //reset_error_globals();
-
-  turn_pid(-55.8);  //55.8
-  pros::delay(600);
-  intake(120, 600);   //counter pop the flag
-
-  pros::delay(600);
-
-  reset_error_globals();
-  turn_pid(56);
-  drive_pid(-28);
-  turn_pid(-90);
-
-  intake(120, 2000);
-  drive_time(50, 750);
-  drive_pid(25.5, 1000);
-  //drive_pid(30, 100, 90);
-
-
-}
-
-
-
-
-//red auton back counter park------------------------------------------------------------------------------------------
-else if(red == 6){
-
-  intake_limit(true, 0);
-  //flywheel(485, 5000);  //495
-  //auto_double_shot(525, 470, 120);
-  flywheel(445, 5000);
-  drive_pid(26);
-  turn_pid(-75, 250);
+  flywheel(440, 5000);
+  drive_pid(22.5);
+  turn_pid(-74, 250);
 
   pros::delay(300);
 
   intake(120, 400);
   pros::delay(400);
 
-  flywheel(518, 5000);
+  flywheel(520, 5000);
   intake_limit(true, 0);
-  drive_pid(5);    //collect ball from platform //20 speed
+  drive_pid(4);    //collect ball from platform //20 speed
 
-  flipper(true, EXTEND - 200);
+  flipper(true, EXTEND - 300);
   drive_pid(-7);
 
   pros::delay(1500);
@@ -413,28 +293,188 @@ else if(red == 6){
   intake(120, 600);
   pros::delay(600);     //shot middle 2 flags
 
+  reset_error_globals();
+
+  turn_pid(-16);
+  reset_error_globals();
+
+  flywheel(545, 10000);
+
+  intake_limit(true, 0);
+  drive_pid(-16.5);
+
+  turn_pid(105);  //55 //going for back cap
+
+  drive_pid(11.2, 300, 60);  //12.2      //going towards cap
+  flipper(true, EXTEND - 300);
+
+  pros::delay(200);
+  drive_pid(-6);
+  pros::delay(300);
+  flipper(true, REST + 500);
+  //pros::delay(100);
+  drive_pid(-8);
+
+  flipper(true, EXTEND);
+  pros::delay(200);
+
+  flipper(true, REST, 14); //flipped cap.
+  drive_pid(15);
+
+  timed_flywheel = false;
+
+  flywheel(545, 5000);
+
+  pros::delay(200);
+
+  turn_pid(-75.5); //70
+
+  pros::delay(100);
+  intake(120, 350);    //shot middle flag on opponent post
+  pros::delay(350);
+
+  flywheel(510, 5000);
+
+  flipper(true, EXTEND);
+  intake(120, 1000);
+  pros::delay(1000);
+
+  drive_pid(16, 50);
+  turn_pid(-90);
+
+}
+
+
+
+//red auton back counter cap v2------------------------------------------------------------------------
+else if(red == 5){
+
+  intake_limit(true, 0);
+  flywheel(440, 5000);
+  drive_pid(22.5);
+  turn_pid(-74, 250);
+
+  pros::delay(300);
+
+  intake(120, 400);
+  pros::delay(400);
+
+  flywheel(520, 5000);
+  intake_limit(true, 0);
+  drive_pid(4);    //collect ball from platform //20 speed
+
+  flipper(true, EXTEND - 300);
+  drive_pid(-7);
+
+  pros::delay(1500);
+
+  intake_limit(false, 0);
+  flipper(true, REST);
+
+  //pros::delay()
+  intake(120, 600);
+  pros::delay(600);     //shot middle 2 flags
+
+  reset_error_globals();
+
   turn_pid(74);
   //reset_error_globals();
 
   flywheel(540, 10000);   //563
 
   intake_limit(true, 0);
-  drive_pid(23);
+  drive_pid(26.5);
 
   pros::delay(500);
-  drive_pid(-14); //-12.5
+  drive_pid(-12); //-12.5
   //reset_error_globals();
 
-  turn_pid(-57);  //55.8
+  turn_pid(-56);  //55
+  pros::delay(600);
+  intake(120, 600);   //counter pop the flag
+
+  pros::delay(600);
+
+  //reset_error_globals();
+//copy of back park basically
+
+  flywheel(507, 8000);
+  turn_pid(116); //-112
+  intake_limit(true, 0);
+  drive_pid(11);        //going towards cap
+  flipper(true, EXTEND);
+
+  drive_pid(-10);
+  flipper(true, REST + 500);
+  pros::delay(100);
+  //drive_pid(-10);
+
+  flipper(true, EXTEND);
+  pros::delay(100);
+
+  flipper(true, REST, 10); //flipped cap
+  drive_pid(12);
+
+  turn_pid(-117); //116
+
+  pros::delay(200);
+  intake(120, 3000);    //shot middle flag on opponent post
+  pros::delay(3000);
+}
+
+
+
+//red auton back counter park------------------------------------------------------------------------------------------
+else if(red == 6){
+
+  intake_limit(true, 0);
+  flywheel(440, 5000);
+  drive_pid(22.5);
+  turn_pid(-74, 250);
+
+  pros::delay(300);
+
+  intake(120, 400);
+  pros::delay(400);
+
+  flywheel(520, 5000);
+  intake_limit(true, 0);
+  drive_pid(4);    //collect ball from platform //20 speed
+
+  flipper(true, EXTEND - 300);
+  drive_pid(-7);
+
+  pros::delay(1500);
+
+  intake_limit(false, 0);
+  flipper(true, REST);
+
+  //pros::delay()
+  intake(120, 600);
+  pros::delay(600);     //shot middle 2 flags
+
+  reset_error_globals();
+
+  turn_pid(74);
+  //reset_error_globals();
+
+  flywheel(540, 10000);   //563
+
+  intake_limit(true, 0);
+  drive_pid(26.5);
+
+  pros::delay(500);
+  drive_pid(-13.5); //-12.5
+
+  turn_pid(-56);  //55
   pros::delay(600);
   intake(120, 600);   //counter pop the flag
 
   pros::delay(600);
 
   reset_error_globals();
-  turn_pid(-33);
-  //drive_pid(-28);
-  //turn_pid(-90);
+
+  turn_pid(-35);
 
   intake(120, 2000);
   drive_time(50, 800);
@@ -442,13 +482,9 @@ else if(red == 6){
   flywheel(0, 1000);
 
   pros::delay(300);
-  drive_pid(25.5, 1000);
-  // reset_error_globals();
-  // reset_drive_encoders();
-  // drive_pid_encoder(25);
+  drive_pid(24.5, 1000); //parked
 
 }
-
 
 
 
@@ -466,135 +502,227 @@ else if(red == 6){
 
 
 
-//blue auton front with park------------------------------------------------------------------------
+//blue auton front park------------------------------------------------------------------------
 else if(blue == 1){
 
   pros::lcd::print(0, "timer 1 %d", pros::millis());
 
-  intake_limit(true, 25); //intake after going 25 inches
+  intake_limit(true, 30); //intake after going 25 inches
   flywheel(570, 10000);   //start flywheel in background //200
-  drive_pid(45, 250);
+  drive_pid(44, 250);
 
-  pros::delay(400);
+  pros::delay(200);
 
-  drive_pid(-38.5); //-35    //drive back to starting tile to shoot balls
-  turn_pid(91, 100);     //face the flags
+  drive_pid(-41, 150); //-35    //drive back to starting tile to shoot balls
+  turn_pid(90.5);     //face the flags
+
+  //reset_error_globals();
 
   intake(120, 300);       //first ball shot
   //turn_pid(0, 250);
   pros::delay(400);
 
-  drive_pid(25);   //second ball shot
+  drive_pid(24);   //second ball shot
   intake(120, 1500); //2000
 
   pros::delay(500);
-  flywheel(0, 500);
+  flywheel(100, 500);
 
-  turn_pid(15, 50, 0.3);   //short timeout
+  turn_pid(10);
+  drive_pid(15);
 
-  swing_fast_pid(16, -15, 50);
-  //drive_pid(5, 50);     //bottom flag hit
+  // flipper(true, EXTEND);
+  // pros::delay(300);
+  // flipper(true, REST);
 
-  drive_time(120, 700);
-  reset_error_globals();
-
+  turn_pid(-10);
   intake(-80, 1000);
-  drive_pid(-29, 100);
+  drive_pid(-16.5, 100);
+  flipper(true, EXTEND);
   turn_pid(-90);      //turn towards cap
+  //reset_error_globals();
+
+  //intake(-100, 2000);
+  flipper(true, REST + 600, 13);
+  drive_pid(19.5, 100, 90); //31    //flip cap 1
+
+  pros::delay(200);
+  turn_pid(-65);
+  flipper(true, REST);
   reset_error_globals();
+  swing_fast_pid(25, -23, 200);
 
-  intake(-100, 2000);
-  drive_pid(23.5, 100, 60); //31    //flip cap 1
+  intake(120, 2500);
+  drive_time(50, 800);
 
-  turn_pid(-65, 200);
-  reset_error_globals();
-  swing_fast_pid(24, -25, 150);
-
-  intake(120, 1500);
-  drive_time(50, 750);
+  pros::delay(200);
 
   reset_error_globals();
   drive_pid(24.5, 1000); //parked
+
+  pros::lcd::print(1, "timer 2 %d", pros::millis());
+
+}
+
+
+
+//blue auton front with 5 flags counter------------------------------------------------------------------------
+else if(blue == 2){
+
+  pros::lcd::print(0, "timer 1 %d", pros::millis());
+
+  intake_limit(true, 30); //intake after going 25 inches
+  flywheel(570, 10000);   //start flywheel in background //200
+  drive_pid(44, 250);
+
+  pros::delay(200);
+
+  drive_pid(-41, 150); //-35    //drive back to starting tile to shoot balls
+  turn_pid(90.5);     //face the flags
+
+  //reset_error_globals();
+
+  intake(120, 300);       //first ball shot
+  //turn_pid(0, 250);
+  pros::delay(400);
+
+  drive_pid(-24);   //second ball shot
+  intake(120, 600); //2000
+
+  pros::delay(500);
+  //flywheel(0, 5000);
+  //flipper(true, REST - 500);
+
+  intake_limit(true, 0);
+  flywheel(525, 10000);
+  turn_pid(10);
+  swing_fast_pid(15, -10, 150, 0.15, 150);
+  //drive_pid(14);
+
+  drive_time(50, 900);
+  //reset_error_globals();
+
+  flipper(true, REST);
+  //flywheel(555, 7000);
+  drive_pid(-22);
+
+  pros::delay(200);
+  intake_limit(false, 0);
+  intake(-120, 550);
+  //flipper(true, EXTEND);
+  turn_pid(-90);      //turn towards cap
+  //reset_error_globals();
+
+  //intake(-100, 2000);
+  flipper(true, EXTEND - 300, 4);
+  drive_pid(7, 100, 90); //31    //flip cap 1
+
+  //pros::delay(50);
+  drive_pid(-7);
+
+  pros::delay(50);
+  intake_limit(true, 0);
+  pros::delay(400);
+  auto_double_shot(520, 500, 0);
+
+  turn_pid(13);
+
+  intake_limit(false, 0);
+  intake(120, 500);
+  pros::delay(500);
+  intake(120, 700);
+  pros::delay(700);
+
+  intake(-120, 4000);
+  turn_pid(-22);
+  //intake(-120, 4000);
+
+  drive_pid(19, 150, 90);
 
   pros::lcd::print(1, "timer 2 %d", pros::millis());
 }
 
 
 
-
-
-
-//blue auton front 5 flags------------------------------------------------------------------------
-else if(blue == 2){
+//blue auton front with 5 flags middle flags------------------------------------------------------------------------
+else if(blue == 3){
 
   pros::lcd::print(0, "timer 1 %d", pros::millis());
 
-  intake_limit(true, 25); //intake after going 25 inches
-  flywheel(530, 15000);   //start flywheel in background //200
-  drive_pid(45);     //get the ball under the cap
+  intake_limit(true, 30); //intake after going 25 inches
+  flywheel(570, 10000);   //start flywheel in background //200
+  drive_pid(44, 250);
+
+  pros::delay(200);
+
+  drive_pid(-41, 150); //-35    //drive back to starting tile to shoot balls
+  turn_pid(90.5);     //face the flags
 
   //reset_error_globals();
 
-  pros::delay(500);
-
-  drive_pid(-36);    //drive back to starting tile to shoot balls
-  turn_pid(90, 150, 0.26);     //face the flags
-
-  intake(120, 400);       //first ball shot
+  intake(120, 300);       //first ball shot
   //turn_pid(0, 250);
   pros::delay(400);
-  flywheel(570, 5000); //200
 
-  drive_pid(25);   //second ball shot
-  intake(120, 1500); //2000
-
-  pros::delay(600);
-//  flywheel(0, 500);
-
-  turn_pid(17, 50);   //short timeout
-
-  swing_fast_pid(10, -17, 50);
-
-  intake_limit(true, 0);
-  drive_pid(8.5, 50);     //bottom flag hit
-
-  drive_time(60, 600);
-  reset_error_globals();
+  drive_pid(24);   //second ball shot
+  intake(120, 600); //2000
 
   pros::delay(500);
-  drive_pid(-26);
-  //intake_limit(false, 0);
-  turn_pid(-90);      //turn towards cap
+  //flywheel(0, 5000);
+  //flipper(true, REST - 500);
 
+  intake_limit(true, 0);
+  flywheel(510, 10000);
+  turn_pid(10);
+  swing_fast_pid(15, -10, 150, 0.15, 150);
+  //drive_pid(14);
+
+  drive_time(50, 900);
   //reset_error_globals();
 
+  flipper(true, REST);
+  //flywheel(555, 7000);
+  drive_pid(-22);
+
+  pros::delay(200);
   intake_limit(false, 0);
+  intake(-120, 550);
+  //flipper(true, EXTEND);
+  turn_pid(-90);      //turn towards cap
+  //reset_error_globals();
 
-  intake_flip(true, -60, 2000, 0, true);
-  drive_pid(24, 100, 110); //31    //flip cap 1
+  //intake(-100, 2000);
+  flipper(true, EXTEND - 300, 4);
+  drive_pid(7, 100, 90); //31    //flip cap 1
 
-  //pros::delay(250);
+  //pros::delay(50);
+  drive_pid(-7);
 
-  intake_flip(false, 0, 0, 0, false);
+  pros::delay(50);
+  intake_limit(true, 0);
+  pros::delay(400);
+  auto_double_shot(510, 410, 130);
 
-  reset_error_globals();
-  turn_pid(50);
+  turn_pid(28);
 
-  drive_pid(18.5);
+  intake_limit(false, 0);
+  intake(120, 500);
+  pros::delay(500);
+  intake(120, 700);
+  pros::delay(700);
 
-  intake(120, 1000);
-  pros::delay(1000);
+  intake(-120, 4000);
+  turn_pid(-37);
+  //intake(-120, 4000);
 
-  swing_fast_pid(8.5, 40, 100, 0.3);
-  drive_time(100, 500);
+  drive_pid(19.5, 150, 90);
 
+  pros::lcd::print(1, "timer 2 %d", pros::millis());
 }
 
 
-
-
-//blue auton back cap v2------------------------------------------------------------------------
-else if(blue == 3){
+//blue auton back cap v1------------------------------------------------------------------------
+else if(blue == 4){
 
   intake_limit(true, 0);
   flywheel(440, 5000);
@@ -608,7 +736,7 @@ else if(blue == 3){
 
   flywheel(520, 5000);
   intake_limit(true, 0);
-  drive_pid(4);    //collect ball from platform //20 speed
+  drive_pid(4);
 
   flipper(true, EXTEND - 300);
   drive_pid(-7);
@@ -671,31 +799,12 @@ else if(blue == 3){
   drive_pid(16, 50);
   turn_pid(90);
 
-
-  // intake(0, 50);
-  // intake_limit(true, 0);
-  //
-  // flipper(true, REST + 600);
-  //
-  // flywheel(540, 5000);
-  //
-  // drive_pid(19, 150, 70);
-  //
-  // pros::delay(100);
-  // drive_pid(-5);
-  //
-  // flipper(true, REST);
-  // intake(120, 2000);
-  //
-  // turn_pid(0);
-
 }
 
 
 
-
-//blue auton back counter cap no parking------------------------------------------------------------------------
-else if(blue == 4){
+//blue auton back counter cap v2------------------------------------------------------------------------
+else if(blue == 5){
 
   intake_limit(true, 0);
   flywheel(440, 5000);
@@ -773,7 +882,7 @@ else if(blue == 4){
 
 
 //blue auton back counter park------------------------------------------------------------------------------------------
-else if(blue == 5){
+else if(blue == 6){
 
   intake_limit(true, 0);
   flywheel(440, 5000);
@@ -813,7 +922,6 @@ else if(blue == 5){
 
   pros::delay(500);
   drive_pid(-13.5); //-12.5
-  //reset_error_globals();
 
   turn_pid(56);  //55
   pros::delay(600);
@@ -823,28 +931,7 @@ else if(blue == 5){
 
   reset_error_globals();
 
-// //cap flip version starts--------
-//   flywheel(0, 1000);
-//   flipper(true, EXTEND);
-//   turn_pid(-112);
-//
-//   flipper(true, REST, 15);
-//   drive_pid(20);
-//
-//   drive_pid(-20);
-//   turn_pid(145);
-//
-//   intake(120, 3000);
-//   drive_time(50, 800);
-//
-//   pros::delay(300);
-//   drive_pid(24.5, 1000); //parked
-// //-------------------------------------
-
-//version without cap flip ----------
   turn_pid(35);
-  //drive_pid(-28);
-  //turn_pid(-90);
 
   intake(120, 2000);
   drive_time(50, 800);
@@ -853,10 +940,8 @@ else if(blue == 5){
 
   pros::delay(300);
   drive_pid(24.5, 1000); //parked
-//----------------------------------
 
 }
-
 
 
 
@@ -899,23 +984,7 @@ else if(red == 7){
   turn_pid(-7);
 
   drive_pid(12);
-  //turn_pid(6);
-  //swing_fast_pid(18, 5, 150);
-
-  // intake(120, 2000);
-  // drive_time(60, 1000); //hit bottom flag, lined up
-  // reset_error_globals();
-
-  //turn_pid(20);
-
   intake(-120, 2000);
-  // drive_pid(-17, 100);
-  // flipper(true, EXTEND);
-  // turn_pid(85);      //turn towards cap
-
-  // flipper(true, REST, 4);
-  // drive_pid(7);
-
   drive_pid(-26.8);
 
   turn_pid(145.5);
@@ -950,9 +1019,6 @@ else if(red == 7){
   pros::delay(50);
   intake(120, 2500);
   pros::delay(800); //shot ball on middle flag in middle lane
-
-  // turn_pid(-10);
-  // drive_time(70, 1000);
 
   flywheel(0, 500);
 
@@ -1007,34 +1073,25 @@ else if(red == 7){
 
   drive_pid(-8);
   pros::delay(100);
-  // turn_pid(-12, 250);
-  // drive_pid(-17); //-22.5
-  // turn_pid(110.5, 400);
 
   turn_pid(-10);
   drive_pid(-22);
   turn_pid(100.5);
 
-  //turn_pid(0, 400, 0.18);
   pros::delay(100);
   intake(120, 300);
   pros::delay(300); //shot top flag on blue side
 
-  //turn_pid(-4);
   drive_pid(20, 250, 90);
 
   pros::delay(150);
   intake(120, 700);
   pros::delay(700); //shot middle flag on blue side
 
-  // turn_pid(-10);
-  // drive_pid(15, 50);
-  // turn_pid(10);
   flywheel(0, 10000);
   flipper(true, REST - 400);
   turn_pid(-12);
   swing_fast_pid(12, 12, 150, 0.25, 700);
-  //drive_pid(18);
 
   intake(120, 2000); //line up again on blue side
   drive_time(50, 1200);
@@ -1066,8 +1123,6 @@ else if(red == 7){
   drive_pid(20.3);
   turn_pid(-90);            //turned into the platform
 
-  //intake(120, 6000);
-  //drive_pid(5);
   drive_time(50, 1200);
   reset_error_globals();
 
@@ -1080,9 +1135,6 @@ else if(red == 7){
   drive_time(50, 500);
   reset_error_globals();
 
-  //drive_pid(-3);
-  //intake(80, 1500);
-  //flipper(true, EXTEND);
   drive_pid(24, 1000);    //parked
   intake(0, 1500);
 
@@ -1094,16 +1146,10 @@ else if(red == 7){
 
 //testing -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-else if(blue == 6){
+else if(blue == 7){
 
-  // intake_limit(true, 0);
-  // pros::delay(2000);
-  // intake(-120, 500);
-
-  swing_fast_pid(20, -90);
 }
 
-//flywheel(200, 10000);
 
 }
 

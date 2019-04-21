@@ -59,7 +59,7 @@ void flipper_task(void* ignore){
         }
 
           if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) == 1 && !pros::competition::is_autonomous()){
-            flipper_position = EXTEND - 500;
+            flipper_position = EXTEND;
           }
 
           else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) == 0 && !pros::competition::is_autonomous()){

@@ -45,13 +45,10 @@ void initialize() {
   pros::task_t correction_task_init = pros::c::task_create(correction_task, (void*)NULL, TASK_PRIORITY_DEFAULT,
                               TASK_STACK_DEPTH_DEFAULT, "CORRECTION TASK");
 
-  //flipper_motor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-  //flywheel_f.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-
   auton = 0;
   red = 0;
   blue = 0;
-  max_auton_limit = 6;
+  max_auton_limit = 7;
 
   pros::lcd::print(7, "initialized");
 }

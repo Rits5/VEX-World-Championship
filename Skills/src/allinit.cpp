@@ -26,10 +26,6 @@ using namespace pros::literals;
 
 //sensors
 
-  //pros::ADIUltrasonic sonar (PORT_ECHO, PORT_PING);
-
-  //pros::ADIGyro gyro (GYRO_PORT, 0.967742);
-
   pros::ADIDigitalIn limit_switch (LIMIT_SWITCH_PORT);
   pros::ADIAnalogIn light (LIGHT_SENSOR_PORT);
   pros::ADIAnalogIn light_flywheel (LIGHT_SENSOR_FLYWHEEL_PORT);

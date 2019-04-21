@@ -35,25 +35,30 @@ void red_selector(int counter){
 
 		case 2:
 		pros::lcd::clear_line(0);
-		pros::lcd::print(0, "red front cap");
+		pros::lcd::print(0, "red front counter");
 		break;
 
 		case 3:
 		pros::lcd::clear_line(0);
-		pros::lcd::print(0, "red back park quick");
+		pros::lcd::print(0, "red front middle flags");
 		break;
 
 		case 4:
 		pros::lcd::clear_line(0);
-		pros::lcd::print(0, "red back counter cap");
+		pros::lcd::print(0, "red back counter v1");
 		break;
 
     case 5:
 		pros::lcd::clear_line(0);
-		pros::lcd::print(0, "red back counter park");
+		pros::lcd::print(0, "red back counter v2");
 		break;
 
-    case 6:
+		case 6:
+		pros::lcd::clear_line(0);
+		pros::lcd::print(0, "red back park");
+		break;
+
+    case 7:
 		pros::lcd::clear_line(0);
 		pros::lcd::print(0, "skills");
 		break;
@@ -72,25 +77,30 @@ void blue_selector(int counter){
 
 		case 2:
 		pros::lcd::clear_line(0);
-		pros::lcd::print(0, "blue front cap");
+		pros::lcd::print(0, "blue front counter");
 		break;
 
 		case 3:
 		pros::lcd::clear_line(0);
-		pros::lcd::print(0, "blue back park quick");
+		pros::lcd::print(0, "blue front middle flags");
 		break;
 
 		case 4:
 		pros::lcd::clear_line(0);
-		pros::lcd::print(0, "blue back counter cap");
+		pros::lcd::print(0, "blue back counter v1");
 		break;
 
-    case 5:
+		case 5:
 		pros::lcd::clear_line(0);
-		pros::lcd::print(0, "blue back counter park");
+		pros::lcd::print(0, "blue back counter v2");
 		break;
 
-    case 6:
+		case 6:
+		pros::lcd::clear_line(0);
+		pros::lcd::print(0, "blue back park");
+		break;
+
+		case 7:
 		pros::lcd::clear_line(0);
 		pros::lcd::print(0, "Testing");
 		break;
